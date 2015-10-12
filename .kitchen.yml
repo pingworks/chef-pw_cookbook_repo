@@ -1,0 +1,19 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: chef_zero
+  require_chef_omnibus: 12.4.1
+
+platforms:
+  - name: ubuntu-14.04
+    driver:
+      box: trusty-server-cloudimg-amd64-vagrant-disk1
+      box_url: https://cloud-images.ubuntu.com/vagrant/trusty/current/trusty-server-cloudimg-amd64-vagrant-disk1.box
+
+suites:
+  - name: default
+    run_list:
+      - recipe[pw_testhelper]
+      - recipe[pw_cookbook_repo::default]

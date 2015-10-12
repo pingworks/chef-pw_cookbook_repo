@@ -1,0 +1,5 @@
+Alias <%= node['pw_cookbook_repo']['alias'] %> <%= node['pw_cookbook_repo']['dir'] %>
+<Directory <%= node['pw_cookbook_repo']['dir'] %>>
+  Require all granted
+  Options Indexes FollowSymLinks
+</Directory>
