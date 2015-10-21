@@ -7,3 +7,4 @@ long_description 'Installs/Configures pw_cookbook_repo'
 version          '0.1.0'
 
 depends 'pw_testhelper'
+depends 'apt'

@@ -16,5 +16,26 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-include_recipe 'pw_cookbook_repo::apache'
-include_recipe 'pw_cookbook_repo::berks-api'
+apt_package 'apache2'
+
+template '/etc/apache2/conf-available/cookbook-repo.conf' do
+  source 'confd_cookbook-repo_alias.erb'
+  owner "root"
+  group "root"
+  mode '644'
+end
+
+bash 'enable_apache_conf' do
+  code 'a2enconf cookbook-repo'
+end
+
+bash 'apache2_restart' do
+  code 'service apache2 restart'
+end
+
+directory node['pw_cookbook_repo']['dir'] do
+  owner node['pw_cookbook_repo']['owner']
+  group node['pw_cookbook_repo']['group']
+  mode '0755'
+  recursive true
+end

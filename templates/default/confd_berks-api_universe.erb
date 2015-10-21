@@ -1,0 +1,4 @@
+<Location <%= node['pw_cookbook_repo']['berks-api-universe-url'] %>>
+  ProxyPass http://localhost:26200/universe
+  ProxyPassReverse http://localhost:26200/universe
+</Location>

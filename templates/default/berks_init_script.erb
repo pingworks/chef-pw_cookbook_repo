@@ -1,0 +1,69 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:
+# Required-Start:    $remote_fs $syslog $network
+# Required-Stop:     $remote_fs $syslog $network
+# Should-Start:      $named
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: berkshelf api
+# Description:       berkshelf api
+### END INIT INFO
+set -e
+
+. /lib/lsb/init-functions
+
+NAME="berks-api"
+USER="<%= node['pw_cookbook_repo']['owner'] %>"
+LOG="/var/log/${NAME}/${NAME}.log"
+
+# Read defaults
+[ -f /etc/default/${NAME} ] && . /etc/default/${NAME}
+
+PIDFILE="/var/run/${NAME}.pid"
+DAEMON="/usr/local/bin/${NAME}"
+ARGS="-c /etc/berkshelf/config.json"
+
+test -x $DAEMON || exit 1
+
+case $1 in
+  start)
+    # check for stale pid file
+    if [ -e $PIDFILE ] && ! kill -0 $(cat $PIDFILE) > /dev/null 2>&1; then
+      rm -f $PIDFILE
+    fi
+    if [ ! -e $PIDFILE ]; then
+      log_daemon_msg "Starting ${NAME}"
+      start-stop-daemon --start --quiet --chuid $USER --background --make-pidfile --pidfile $PIDFILE --exec /bin/bash -- -c "exec $DAEMON $ARGS > ${LOG} 2>&1"
+      log_end_msg $?
+    fi
+    ;;
+  stop)
+    # check for stale pid file
+    if [ -e $PIDFILE ] && ! kill -0 $(cat $PIDFILE) > /dev/null 2>&1; then
+      rm -f $PIDFILE
+    fi
+    if [ -e $PIDFILE ]; then
+      log_daemon_msg "Stopping ${NAME}"
+      start-stop-daemon --stop --quiet --pidfile $PIDFILE
+      log_end_msg $?
+      rm -f $PIDFILE
+    fi
+    ;;
+  restart)
+    $0 stop
+    sleep 2
+    $0 start
+    ;;
+  status)
+    status_of_proc -p $PIDFILE "$DAEMON" ${NAME}
+    RETVAL=$?
+    ;;
+
+  *)
+    echo "Usage: $0 {start|stop|restart|status}"
+    exit 1
+esac
+
+exit 0

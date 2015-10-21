@@ -1,0 +1,14 @@
+{
+  "home_path": "/etc/berkshelf",
+  "endpoints": [
+    {
+      "type": "binrepo_store",
+      "options": {
+        "repo_base_url": "<%= node['pw_cookbook_repo']['berks-api-url'] %>",
+        "path": "<%= node['pw_cookbook_repo']['dir'] %>",
+        "import": "<%= node['pw_cookbook_repo']['importdir'] %>"
+      }
+    }
+  ],
+  "build_interval": <%= node['pw_cookbook_repo']['berks-api-rebuild'] %>.0
+}
