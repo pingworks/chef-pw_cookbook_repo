@@ -16,13 +16,6 @@ package 'libarchive-dev'
 package 'build-essential'
 package 'git'
 
-cookbook_file '/root/.gemrc' do
-  source 'gemrc'
-  owner 'root'
-  group 'root'
-  mode 00644
-end
-
 bash 'gem install berkshelf-api' do
   user 'root'
   cwd '/tmp'
