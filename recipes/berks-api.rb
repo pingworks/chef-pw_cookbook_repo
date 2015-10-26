@@ -16,10 +16,20 @@ package 'libarchive-dev'
 package 'build-essential'
 package 'git'
 
+cookbook_file '/root/.gemrc' do
+  source 'gemrc'
+  owner 'root'
+  group 'root'
+  mode 00644
+end
+
 bash 'gem install berkshelf-api' do
   user 'root'
   cwd '/tmp'
-  code 'gem install berkshelf-api'
+  code <<-EOF
+  gem install unf
+  gem install berkshelf-api
+  EOF
   not_if 'test -d /var/lib/gems/2.1.0/gems/berkshelf-api-2.1.1'
 end
 
