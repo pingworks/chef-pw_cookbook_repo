@@ -10,8 +10,8 @@ end
 node.force_override['apt']['periodic_update_min_delay'] = 0
 include_recipe 'apt'
 
-package 'ruby2.1'
-package 'ruby2.1-dev'
+package 'ruby2.2'
+package 'ruby2.2-dev'
 package 'libarchive-dev'
 package 'build-essential'
 package 'git'
@@ -21,7 +21,7 @@ bash 'gem install berkshelf-api' do
   cwd '/tmp'
   code <<-EOF
   gem install unf
-  gem install berkshelf-api
+  gem install berkshelf-api:2.1.1
   EOF
   not_if 'test -d /var/lib/gems/2.1.0/gems/berkshelf-api-2.1.1'
 end
